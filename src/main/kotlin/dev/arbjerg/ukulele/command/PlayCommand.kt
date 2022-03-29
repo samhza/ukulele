@@ -34,10 +34,13 @@ class PlayCommand(
 
     override suspend fun CommandContext.invoke() {
         if (!ensureVoiceChannel()) return
-        val identifier = argumentText
+
+        var identifier = argumentText
         players.get(guild, guildProperties).lastChannel = channel
 
-        if (spotify != null) {
+        if (!checkValidUrl(identifier)) {
+            identifier = "ytsearch:$identifier"
+        } else if (spotify != null) {
             try {
                 val spotifyUri = spotifyUrlToUri(identifier) ?: identifier;
                 val searches = convertSpotifyUri(spotifyUri)
@@ -143,6 +146,11 @@ class PlayCommand(
         }
 
         return "spotify:" + split[0] + ":" + split[1]
+    }
+
+    fun checkValidUrl(url: String): Boolean {
+        return url.startsWith("http://")
+                || url.startsWith("https://")
     }
 
     inner class Loader(
