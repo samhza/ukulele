@@ -56,7 +56,7 @@ class PlayCommand(
                 // Identifier isn't a spotify URI
             }
         }
-        apm.loadItem(identifier, Loader(this, player, identifier))
+        apm.loadItem(identifier, Loader(this, player, identifier, true, true))
     }
 
     fun CommandContext.ensureVoiceChannel(): Boolean {
